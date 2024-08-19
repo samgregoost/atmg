@@ -67,9 +67,9 @@ Our trained model checkpoints can be downloaded from the below links.
 
 ## Image traversals
 
-<!-- <p align="center">
-    <img src="assets/traversals_preview.jpg" width="90%">
-</p> -->
+<p align="center">
+    <img src="assets/text_traversal.jpg" width="90%">
+</p>
 
 To perform image traversals run the below command
 
