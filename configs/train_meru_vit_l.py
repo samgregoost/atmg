@@ -27,7 +27,7 @@ from meru.optim import LinearWarmupCosineDecayLR, set_weight_decay_per_param
 
 dataset = L(ImageTextWebDataset)(
 #    tarfiles=["datasets/redcaps/tarfiles/*.tar"],
-    tarfiles=["/mnt/efs2/redcaps_gil/tarfiles/*.tar"],
+    tarfiles=["/home/ubuntu/atmg/datasets/*.tar"],
     mapper=L(RedCapsTarMapper)(
         image_transform=[
             L(T.RandomResizedCrop)(
@@ -50,7 +50,7 @@ model = L(MERU)(
         arch="L12_W512", vocab_size=49408, context_length=77
     ),
     embed_dim=512,
-    curv_init=0.5,
+    curv_init=1.0,
     learn_curv=False,
     entail_weight=0.2,
 )
