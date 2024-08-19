@@ -9,8 +9,8 @@ Note: This codebase is heavily based on the [MERU](https://github.com/facebookre
 ## Installation
 
 ```
-git clone git@github.com:facebookresearch/meru.git
-cd meru
+git clone https://github.com/samgregoost/atmg.git
+cd atmg
 conda create -n atmg python=3.9 --yes
 conda activate atmg
 ```
