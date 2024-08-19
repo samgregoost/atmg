@@ -7,7 +7,7 @@
 
 **CVPR 2024 (Highlight)** [[`Paper`](https://openaccess.thecvf.com/content/CVPR2024/papers/Ramasinghe_Accept_the_Modality_Gap_An_Exploration_in_the_Hyperbolic_Space_CVPR_2024_paper.pdf)] [[`BibTeX`](#citing-meru)]
 
-<p align="center"><img src="assets/meru_model.jpg" width="90%"></p>
+<!-- <p align="center"><img src="assets/meru_model.jpg" width="90%"></p> -->
 
 
 ## Installation
@@ -79,9 +79,9 @@ Their training configs are available in [`./configs`](./configs) directory.
 
 ## Image traversals
 
-<p align="center">
+<!-- <p align="center">
     <img src="assets/traversals_preview.jpg" width="90%">
-</p>
+</p> -->
 
 Perform image traversals ([Section 5 in our paper](https://arxiv.org/abs/2304.09172))
 in the representation space of our trained models (ViT-large only).
