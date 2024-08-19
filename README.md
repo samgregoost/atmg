@@ -1,8 +1,7 @@
-# Accept the Modality Gap: An Exploration in the Hyperbolic Space
+# Accept the Modality Gap: An Exploration in the Hyperbolic Space (CVPR 2024 Highlight)
 Sameera Ramasinghe, Violetta Shevchenko, Gil Avraham, Ajanthan Thalaiyasingam
 
-**CVPR 2024 (Highlight)** [[`Paper`](https://openaccess.thecvf.com/content/CVPR2024/papers/Ramasinghe_Accept_the_Modality_Gap_An_Exploration_in_the_Hyperbolic_Space_CVPR_2024_paper.pdf)] [[`BibTeX`](#citing-meru)]
-
+[[`Paper`](https://openaccess.thecvf.com/content/CVPR2024/papers/Ramasinghe_Accept_the_Modality_Gap_An_Exploration_in_the_Hyperbolic_Space_CVPR_2024_paper.pdf)] 
 <!-- <p align="center"><img src="assets/meru_model.jpg" width="90%"></p> -->
 
 
@@ -24,7 +23,7 @@ python -m pip install -r requirements.txt
 python setup.py develop
 ```
 
-## Training data
+### Training data
 
 The models are trained using the [RedCaps dataset](https://redcaps.xyz).
 Use the [RedCaps downloader tool](https://github.com/redcaps-dataset/redcaps-downloader) and follow the instructions to
@@ -57,7 +56,7 @@ python scripts/train.py --config configs/train_atmg_vit_s.py --num-gpus 8 --outp
 
 To change the other configurations, edit ```configs/train_atmg_vit_l.py```. The VIT-small and VIT-base model configurations are inherited from the VIT-large config file. 
 
-## Trained model checkpoints
+## Pretrained checkpoints
 
 Our trained model checkpoints can be downloaded from the below links.
 
