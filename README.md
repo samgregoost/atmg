@@ -1,6 +1,7 @@
 # Accept the Modality Gap: An Exploration in the Hyperbolic Space (CVPR 2024 Highlight) [[`Paper`](https://openaccess.thecvf.com/content/CVPR2024/papers/Ramasinghe_Accept_the_Modality_Gap_An_Exploration_in_the_Hyperbolic_Space_CVPR_2024_paper.pdf)] 
 Sameera Ramasinghe, Violetta Shevchenko, Gil Avraham, Ajanthan Thalaiyasingam
 
+Note: This codebase is heavily based on the MERU repo. We thank the [MERU][https://github.com/facebookresearch/meru] authors for their generous contributions.
 
 <!-- <p align="center"><img src="assets/meru_model.jpg" width="90%"></p> -->
 
