@@ -17,12 +17,12 @@ Reference: https://detectron2.readthedocs.io/en/latest/tutorials/lazyconfigs.htm
 from torch.optim import AdamW
 from torchvision import transforms as T
 
-from meru.config import LazyCall as L
-from meru.data.redcaps import RedCapsTarMapper, ImageTextWebDataset
-from meru.encoders.image_encoders import build_timm_vit
-from meru.encoders.text_encoders import TransformerTextEncoder
-from meru.models import MERU
-from meru.optim import LinearWarmupCosineDecayLR, set_weight_decay_per_param
+from atmg.config import LazyCall as L
+from atmg.data.redcaps import RedCapsTarMapper, ImageTextWebDataset
+from atmg.encoders.image_encoders import build_timm_vit
+from atmg.encoders.text_encoders import TransformerTextEncoder
+from atmg.models import MERU
+from atmg.optim import LinearWarmupCosineDecayLR, set_weight_decay_per_param
 
 
 dataset = L(ImageTextWebDataset)(

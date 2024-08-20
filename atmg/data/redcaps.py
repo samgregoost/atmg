@@ -17,7 +17,7 @@ from loguru import logger
 from torch.utils.data import IterableDataset
 from torchvision import transforms as T
 
-import meru.utils.distributed as dist
+import atmg.utils.distributed as dist
 
 ws.load()
 

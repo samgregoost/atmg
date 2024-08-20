@@ -26,7 +26,7 @@ from torch.distributed.algorithms.ddp_comm_hooks import default as ddph
 from torch.nn.parallel import DistributedDataParallel
 from torch.utils.data import DataLoader
 
-import meru.utils.distributed as dist
+import atmg.utils.distributed as dist
 
 __all__ = ["callable_to_str", "LazyCall", "LazyConfig", "LazyFactory"]
 

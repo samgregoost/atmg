@@ -13,7 +13,7 @@ import torch
 from loguru import logger
 from torch.nn.parallel import DistributedDataParallel
 
-import meru.utils.distributed as dist
+import atmg.utils.distributed as dist
 
 
 class CheckpointManager:

@@ -12,9 +12,9 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-import meru.utils.distributed as dist
-from meru import lorentz as L
-from meru.encoders.text_encoders import TransformerTextEncoder
+import atmg.utils.distributed as dist
+from atmg import lorentz as L
+from atmg.encoders.text_encoders import TransformerTextEncoder
 
 
 class CLIPBaseline(nn.Module):

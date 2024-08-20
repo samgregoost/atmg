@@ -19,11 +19,11 @@ from omegaconf import OmegaConf
 from torch.cuda import amp
 from torch.utils.tensorboard import SummaryWriter
 
-import meru.utils.distributed as dist
-from meru.config import LazyConfig, LazyFactory
-from meru.tokenizer import Tokenizer
-from meru.utils.checkpointing import CheckpointManager
-from meru.utils.timer import Timer
+import atmg.utils.distributed as dist
+from atmg.config import LazyConfig, LazyFactory
+from atmg.tokenizer import Tokenizer
+from atmg.utils.checkpointing import CheckpointManager
+from atmg.utils.timer import Timer
 
 
 # fmt: off
