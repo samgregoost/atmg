@@ -13,11 +13,11 @@ import torch
 import torchvision.transforms as T
 from tqdm import tqdm
 
-from meru import lorentz as L
-from meru.data.evaluation import CocoCaptions, Flickr30kCaptions
-from meru.evaluation.catalog import DatasetCatalog
-from meru.models import MERU, CLIPBaseline
-from meru.tokenizer import Tokenizer
+from atmg import lorentz as L
+from atmg.data.evaluation import CocoCaptions, Flickr30kCaptions
+from atmg.evaluation.catalog import DatasetCatalog
+from atmg.models import MERU, CLIPBaseline
+from atmg.tokenizer import Tokenizer
 
 
 class ZeroShotRetrievalEvaluator:

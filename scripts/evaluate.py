@@ -16,9 +16,9 @@ from omegaconf import OmegaConf
 from hydra.utils import instantiate
 from loguru import logger
 
-from meru.config import LazyConfig, LazyFactory
-from meru.utils.checkpointing import CheckpointManager
-from meru.tokenizer import Tokenizer
+from atmg.config import LazyConfig, LazyFactory
+from atmg.utils.checkpointing import CheckpointManager
+from atmg.tokenizer import Tokenizer
 import numpy as np
 import matplotlib.pyplot as plt
 

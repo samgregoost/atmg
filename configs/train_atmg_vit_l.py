@@ -50,7 +50,7 @@ model = L(MERU)(
         arch="L12_W512", vocab_size=49408, context_length=77
     ),
     embed_dim=512,
-    curv_init=1.0,
+    curv_init=0.1,
     learn_curv=False,
     entail_weight=0.2,
 )
@@ -83,7 +83,7 @@ train = dict(
     num_iterations=120000,
     cudnn_benchmark=True,
     cudnn_deterministic=False,
-    num_workers=4,
+    num_workers=1,
     ddp=dict(  # options for DistributedDataParallel
         broadcast_buffers=False, static_graph=True
     ),

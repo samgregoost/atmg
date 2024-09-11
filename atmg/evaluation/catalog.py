@@ -12,7 +12,7 @@ from typing import Callable
 
 from torchvision.datasets import Country211, FGVCAircraft, RenderedSST2
 
-import meru.data.evaluation as DE
+import atmg.data.evaluation as DE
 
 
 class DatasetCatalog:

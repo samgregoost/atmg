@@ -17,11 +17,11 @@ from torch.utils.data import DataLoader
 from torchmetrics.classification import MulticlassAccuracy
 from tqdm import tqdm
 
-from meru import lorentz as L
-from meru.evaluation.catalog import DatasetCatalog
-from meru.evaluation.class_names import CLASS_NAMES
-from meru.models import MERU, CLIPBaseline
-from meru.tokenizer import Tokenizer
+from atmg import lorentz as L
+from atmg.evaluation.catalog import DatasetCatalog
+from atmg.evaluation.class_names import CLASS_NAMES
+from atmg.models import MERU, CLIPBaseline
+from atmg.tokenizer import Tokenizer
 
 
 class ZeroShotClassificationEvaluator:

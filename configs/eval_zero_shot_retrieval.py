@@ -4,12 +4,12 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
-from meru.config import LazyCall as L
-from meru.evaluation.retrieval import ZeroShotRetrievalEvaluator
+from atmg.config import LazyCall as L
+from atmg.evaluation.retrieval import ZeroShotRetrievalEvaluator
 
 
 evaluator = L(ZeroShotRetrievalEvaluator)(
     datasets=["coco", "flickr30k"],
-    data_dir="/mnt/efs/eval",
+    data_dir="datasets/eval",
     image_size=224,
 )
