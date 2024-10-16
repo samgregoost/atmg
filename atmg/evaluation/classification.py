@@ -20,7 +20,7 @@ from tqdm import tqdm
 from atmg import lorentz as L
 from atmg.evaluation.catalog import DatasetCatalog
 from atmg.evaluation.class_names import CLASS_NAMES
-from atmg.models import MERU, CLIPBaseline
+from atmg.models import ATMG, CLIPBaseline
 from atmg.tokenizer import Tokenizer
 
 
@@ -68,7 +68,7 @@ class ZeroShotClassificationEvaluator:
         )
 
     @torch.inference_mode()
-    def __call__(self, model: MERU | CLIPBaseline) -> dict[str, float]:
+    def __call__(self, model: ATMG | CLIPBaseline) -> dict[str, float]:
         model = model.eval()
         tokenizer = Tokenizer()
 
@@ -93,7 +93,7 @@ class ZeroShotClassificationEvaluator:
                 class_prompt_tokens = tokenizer(class_prompts)
                 class_feats = model.encode_text(class_prompt_tokens, project=False)
 
-                if isinstance(model, MERU):
+                if isinstance(model, ATMG):
                     # Ensemble in the tangent space, then project to Hyperboloid.
                 #    class_feats = class_feats.mean(dim=0)
                    # class_feats = class_feats[0]
@@ -130,44 +130,16 @@ class ZeroShotClassificationEvaluator:
             # Evaluate in small batches of 256 instances.
             for _feats, _labels in zip(image_feats.split(256), labels.split(256)):
                 # Compute pairwise similarity depending on model type:
-                if isinstance(model, MERU):
-                  #   scores = L.pairwise_inner(_feats, classifier, model.curv.exp())
-                  #  scores = L.pairwise_oxy_angle(_feats, classifier, model.curv.exp())
-#                    scores = -L.pairwise_dist(_feats, classifier.reshape(-1,512), model.curv.exp()).reshape(_feats.shape[0],1000,7).mean(dim=-1)             
-                    
-                    #print(classifier.shape)
-                     scores_ = torch.abs(L.pairwise_oxy_angle(_feats, classifier.reshape(-1,512), model.curv.exp()).reshape(_feats.shape[0],DatasetCatalog.NUM_CLASSES[dname],classifier.shape[1])).mean(dim=-1) # L.pairwise_oxy_angle(_feats, classifier, model.curv.exp())
-                   #  scores_ = torch.abs(L.pairwise_oxy_angle(_feats, classifier.reshape(-1,512),  model.curv.exp()).reshape(_feats.shape[0],DatasetCatalog.NUM_CLASSES[dname],classifier.shape[1])).mean(dim=-1)
-                     scores = L.pairwise_inner(_feats, classifier.reshape(-1,512), model.curv.exp()).reshape(_feats.shape[0],DatasetCatalog.NUM_CLASSES[dname],classifier.shape[1]).mean(dim=-1)
-                     
-                    # result = scores_.clone()
+                if isinstance(model, ATMG):
+                     #compute the pairwise hyperbolic oxy angles
+                     scores = torch.abs(L.pairwise_oxy_angle(_feats, classifier.reshape(-1,512), model.curv.exp()).reshape(_feats.shape[0],DatasetCatalog.NUM_CLASSES[dname],classifier.shape[1])).mean(dim=-1) # L.pairwise_oxy_angle(_feats, classifier, model.curv.exp())
+                     max_values, max_indices = torch.topk(scores, 1, dim=1, largest=True)                 
+                     mask = torch.zeros_like(scores,dtype =torch.bool)
 
-    # Step 2: Find the two smallest values in each row.
-    # This can be done by using topk with largest=False to find the smallest values
-                     min_values, min_indices = torch.topk(scores_, 1, dim=1, largest=True)
-                   
-                   #print(scores_.shape)
-                   #  print(min_indices)
-    # Step 3: Create a mask of the same shape as the matrix, initialized to False
-                     mask = torch.zeros_like(scores_,dtype =torch.bool)
+                     for row in range(scores.size(0)):
+                         mask[row, max_indices[row]] = True
 
-    # Step 4: Use the indices from topk to mark the positions of the minimum values in the mask
-                     for row in range(scores_.size(0)):
-                         mask[row, min_indices[row]] = True
-                     
-    # Step 5: Use the mask to retain the minimum two values in each row and set others to ze
-                  #   print(scores)
-                 #    print(scores_.shape)
-                  #   print(mask.shape)
                      scores[~mask] = -1e12
-
-                 #    print(scores)
-                  #   scores = scores_  + 10*scores
-
-          #    scores = -L.pairwise_oxy_angle(classifier.reshape(-1,512),_feats, model.curv.exp()).reshape(1000,7, _feats.shape[0]).mean(dim=1).T
-                  #   scores_ = -L.pairwise_dist(classifier.reshape(-1,512),_feats, model.curv.exp()).reshape(1000,7, _feats.shape[0]).mean(dim=1).T
-                  #   scores = scores# + 0.1*scores_
-                  #  scores = -L.pairwise_oxy_angle(classifier, _feats, model.curv.exp()).T
                 else:
                     scores = _feats @ classifier.T
 
@@ -227,7 +199,7 @@ class LinearProbeClassificationEvaluator:
         self._sk_kwargs = {"random_state": 0, "max_iter": 1000}
 
     @torch.inference_mode()
-    def __call__(self, model: MERU | CLIPBaseline) -> dict[str, float]:
+    def __call__(self, model: ATMG | CLIPBaseline) -> dict[str, float]:
         # Remove projection layer. Now `.encode_image()` will always give Euclidean
         # representations directly from the image encoder, regardless of model type.
         model = model.eval()
@@ -342,7 +314,7 @@ class LinearProbeClassificationEvaluator:
 
 def _encode_dataset(
     data_loader: DataLoader,
-    model: MERU | CLIPBaseline,
+    model: ATMG | CLIPBaseline,
     project: bool,
 ):
     """
