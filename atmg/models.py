@@ -176,7 +176,7 @@ class CLIPBaseline(nn.Module):
         return output_dict
 
 
-class MERU(CLIPBaseline):
+class ATMG(CLIPBaseline):
     """
     Our MERU model, that modifies CLIP to embed images and text in a hyperbolic
     space. Modifications are as follows:
@@ -286,9 +286,7 @@ class MERU(CLIPBaseline):
         avg_lorenz = klein_average/torch.sqrt(1 + curv * klein_norm)
 
         geo_dist = L.pairwise_dist(avg_lorenz, torch.zeros_like(avg_lorenz))
-
-  #      print(geo_dist.shape)
-   #     print(geo_dist)
+        
         return  geo_dist # torch.abs(geo_dist - dist) 
     
 
@@ -306,8 +304,6 @@ class MERU(CLIPBaseline):
         self.curv.data = torch.clamp(self.curv.data, **self._curv_minmax)
         _curv = self.curv.exp()
 
-        # Clamp scaling factors such that they do not up-scale the feature norms.
-        # Once `exp(scale) = 1`, they can simply be removed during inference.
         self.visual_alpha.data = torch.clamp(self.visual_alpha.data, max=0.0)
         self.textual_alpha.data = torch.clamp(self.textual_alpha.data, max=0.0)
 
@@ -315,42 +311,15 @@ class MERU(CLIPBaseline):
         image_feats = self.encode_image(images, project=True)
         text_feats = self.encode_text(tokens, project=True)
 
-        # Get features from all GPUs to increase negatives for contrastive loss.
-        # These will be lists of tensors with length = world size.
         all_image_feats = dist.gather_across_processes(image_feats)
         all_text_feats = dist.gather_across_processes(text_feats)
 
-        # shape: (batch_size * world_size, embed_dim)
         all_image_feats = torch.cat(all_image_feats, dim=0)
         all_text_feats = torch.cat(all_text_feats, dim=0)
-
-        # Compute all necessary loss components. We enclose the entire block with
-        # autocast to force a higher floating point precision.
         with torch.autocast(self.device.type, dtype=torch.float32):
-            # Compute logits for contrastive loss.
-            image_logits = -L.pairwise_dist(image_feats, torch.zeros_like(image_feats), _curv)
-         
-            text_logits = -L.pairwise_dist(text_feats, torch.zeros_like(text_feats), _curv)
-
-            
-       #     print(f"image {torch.mean(image_logits)}")
-        #    print(f"text {torch.mean(text_logits)}")
-        
-
-
-
-          #  img_e_loss = self.einstein_loss(image_feats, 0.5, _curv)
-         #   print(f"image {e_loss}")
-          #  text_e_loss = self.einstein_loss(text_feats, 0.5, _curv)
-        #    print(f"text {e_loss}")
-          #  e_loss = torch.mean(torch.abs(img_e_loss - 2) + torch.abs(text_e_loss - 0.5))
-      #      L.pairwise_dist(avg_lorenz, torch.zeros_like(avg_lorenz))
+            # Compute logits for hyperbolic angle based contrastive loss.
             text_logits = -L.pairwise_oxy_angle(text_feats, all_image_feats, _curv)
             image_logits = L.pairwise_oxy_angle(image_feats, all_text_feats, _curv)
-            # Compute cross entropy loss: we compute log probabilities and take the
-            # diagonal elements as targets: image[i] should match text[i] in batch.
-            # Shift the targets according to rank of GPU process (we assume that all
-            # GPU processes have the same local batch size).
             batch_size = image_feats.shape[0]
             targets = torch.arange(batch_size, device=text_logits.device)
             targets = targets + batch_size * self._rank
@@ -365,25 +334,11 @@ class MERU(CLIPBaseline):
                 nn.functional.cross_entropy(_scale * text_logits, targets)
             )
 
-            # Hyperbolic entailment loss: text should entail matching image.
-            _angle = L.oxy_angle(text_feats, image_feats, _curv)
-            _angle2 = L.oxy_angle(image_feats, text_feats, _curv)
-            _aperture = L.half_aperture(text_feats, _curv)
-            entailment_loss = torch.clamp(_angle - _aperture, min=0).mean()
-            entailment_loss2 = torch.clamp(torch.abs(_angle), min=1e-5).mean()
-            entailment_loss3 = -torch.abs(_angle2).mean()
-
-            loss = contrastive_loss
-           # loss = loss + 0.5 * e_loss
-            if self.entail_weight > 0:
-                loss = loss + 0* self.entail_weight * entailment_loss
-                loss = loss + self.entail_weight * entailment_loss2
-                loss = loss + self.entail_weight * entailment_loss3
+          #  loss = contrastive_loss
         return {
-            "loss": loss,
+            "loss": contrastive_loss,
             "logging": {
                 "contrastive_loss": contrastive_loss,
-                "entailment_loss": entailment_loss,
                 "logit_scale": _scale,
                 "curv": _curv,
             },

@@ -21,7 +21,7 @@ from atmg.config import LazyCall as L
 from atmg.data.redcaps import RedCapsTarMapper, ImageTextWebDataset
 from atmg.encoders.image_encoders import build_timm_vit
 from atmg.encoders.text_encoders import TransformerTextEncoder
-from atmg.models import MERU
+from atmg.models import ATMG
 from atmg.optim import LinearWarmupCosineDecayLR, set_weight_decay_per_param
 
 
@@ -40,7 +40,7 @@ dataset = L(ImageTextWebDataset)(
     seed="${..train.seed}",
 )
 
-model = L(MERU)(
+model = L(ATMG)(
     visual=L(build_timm_vit)(
         arch="vit_large_patch16_224",
         global_pool="token",
