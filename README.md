@@ -61,18 +61,9 @@ To change the other configurations, edit ```configs/train_atmg_vit_l.py```. The 
 
 Our trained model checkpoints can be downloaded from the below links.
 
-- Model: [ATMG ViT-base](https://dl.fbaipublicfiles.com/meru/meru_vit_b.pth) and config: [train_atmg_vit_b.py](./configs/train_atmg_vit_b.py)
-- Model: [ATMG ViT-small](https://dl.fbaipublicfiles.com/meru/meru_vit_s.pth) and config: [train_atmg_vit_s.py](./configs/train_atmg_vit_s.py)
+- Model: [ATMG ViT-base](https://drive.google.com/drive/folders/1uS0t_tODBGSJg7fYZjalwA3jHNPkCgiJ?usp=sharing) and config: [train_atmg_vit_b.py](./configs/train_atmg_vit_b.py)
+- Model: [ATMG ViT-small](https://drive.google.com/drive/folders/1n54yl6IPZRexw2wE0dqUbQWI7IrpsMvB?usp=sharing) and config: [train_atmg_vit_s.py](./configs/train_atmg_vit_s.py)
 
-
-## Image traversals
-
-To perform image traversals run the below command
-
-```
-python scripts/image_traversals.py --image-path assets/taj_mahal.jpg \
-    --checkpoint-path checkpoints/atmg_vit_s.pth --train-config configs/train_atmg_vit_s.py
-```
 
 ## Evaluate trained models
 
